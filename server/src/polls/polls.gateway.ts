@@ -1,4 +1,10 @@
-import { Logger, UsePipes, ValidationPipe } from '@nestjs/common';
+import {
+  BadRequestException,
+  Logger,
+  UseFilters,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import {
   OnGatewayInit,
   WebSocketGateway,
@@ -10,9 +16,10 @@ import {
 import { Namespace } from 'socket.io';
 import { PollsService } from './polls.service';
 import { SocketWihAuth } from './types';
-import { WsBadRequestException } from 'src/exceptions/ws-exception';
+import { WsCatchAllFilter } from 'src/exceptions/ws-catch-all-filter';
 
 @UsePipes(new ValidationPipe())
+@UseFilters(new WsCatchAllFilter())
 @WebSocketGateway({
   namespace: 'polls',
 })
@@ -57,6 +64,6 @@ export class PollsGateway
 
   @SubscribeMessage('test')
   async test() {
-    throw new WsBadRequestException('Invalid empty data');
+    throw new BadRequestException({ test: 'test' });
   }
 }
