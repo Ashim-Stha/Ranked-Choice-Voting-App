@@ -1,15 +1,18 @@
-import { Logger } from '@nestjs/common';
+import { Logger, UsePipes, ValidationPipe } from '@nestjs/common';
 import {
   OnGatewayInit,
   WebSocketGateway,
   OnGatewayConnection,
   OnGatewayDisconnect,
   WebSocketServer,
+  SubscribeMessage,
 } from '@nestjs/websockets';
 import { Namespace } from 'socket.io';
 import { PollsService } from './polls.service';
 import { SocketWihAuth } from './types';
+import { WsBadRequestException } from 'src/exceptions/ws-exception';
 
+@UsePipes(new ValidationPipe())
 @WebSocketGateway({
   namespace: 'polls',
 })
@@ -50,5 +53,10 @@ export class PollsGateway
     this.logger.debug(`Number of connected sockets: ${sockets.size}`);
 
     // TODO - remove client from poll and send `participants_updated` event to remaining clients
+  }
+
+  @SubscribeMessage('test')
+  async test() {
+    throw new WsBadRequestException('Invalid empty data');
   }
 }
