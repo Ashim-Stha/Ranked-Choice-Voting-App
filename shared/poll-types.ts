@@ -18,5 +18,7 @@ export type Poll = {
   participants: Participants;
   adminID: string;
   nominations: Nominations;
+  // rankings: Rankings;
+  // results: Results;
   hasStarted: boolean;
 };

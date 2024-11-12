@@ -1,7 +1,7 @@
 import { CanActivate, ExecutionContext, Logger } from '@nestjs/common';
 import { PollsService } from './polls.service';
 import { JwtService } from '@nestjs/jwt';
-import { AuthPayload, SocketWihAuth } from './types';
+import { AuthPayload, SocketWithAuth } from './types';
 import { WsUnauthorizedException } from 'src/exceptions/ws-exception';
 
 export class GatewayAdminGuard implements CanActivate {
@@ -11,7 +11,7 @@ export class GatewayAdminGuard implements CanActivate {
     private readonly jwtService: JwtService,
   ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const socket: SocketWihAuth = context.switchToWs().getClient();
+    const socket: SocketWithAuth = context.switchToWs().getClient();
 
     const token =
       socket.handshake.auth.token || socket.handshake.headers['token'];

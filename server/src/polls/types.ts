@@ -2,7 +2,7 @@ import { Request } from 'express';
 import { Nomination } from 'shared/poll-types';
 import { Socket } from 'socket.io';
 
-//service type
+// service types
 export type CreatePollFields = {
   topic: string;
   votesPerVoter: number;
@@ -26,12 +26,13 @@ export type AddParticipantFields = {
   name: string;
 };
 
-export type RemoveParticipantFields = {
+export type AddNominationFields = {
   pollID: string;
   userID: string;
+  text: string;
 };
 
-//repository types
+// repository types
 export type CreatePollData = {
   pollID: string;
   topic: string;
@@ -51,7 +52,7 @@ export type AddNominationData = {
   nomination: Nomination;
 };
 
-//guard types
+// guard types
 export type AuthPayload = {
   userID: string;
   pollID: string;
@@ -59,4 +60,4 @@ export type AuthPayload = {
 };
 
 export type RequestWithAuth = Request & AuthPayload;
-export type SocketWihAuth = Socket & AuthPayload;
+export type SocketWithAuth = Socket & AuthPayload;
