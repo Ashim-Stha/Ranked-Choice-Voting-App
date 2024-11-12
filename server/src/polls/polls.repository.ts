@@ -1,17 +1,14 @@
-import {
-  Inject,
-  Injectable,
-  InternalServerErrorException,
-  Logger,
-} from '@nestjs/common';
+import { Inject, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Redis } from 'ioredis';
 import { IORedisKey } from 'src/redis.module';
-import { Poll } from 'shared';
 import { AddNominationData, AddParticipantData, CreatePollData } from './types';
+import { Poll } from 'shared';
 
 @Injectable()
 export class PollsRepository {
+  // to use time-to-live from configuration
   private readonly ttl: string;
   private readonly logger = new Logger(PollsRepository.name);
 
@@ -33,13 +30,13 @@ export class PollsRepository {
       topic,
       votesPerVoter,
       participants: {},
-      nominatons: {},
+      nominations: {},
       adminID: userID,
       hasStarted: false,
     };
 
     this.logger.log(
-      `Creating new poll:${JSON.stringify(initialPoll, null, 2)} with TTL ${
+      `Creating new poll: ${JSON.stringify(initialPoll, null, 2)} with TTL ${
         this.ttl
       }`,
     );
@@ -73,7 +70,13 @@ export class PollsRepository {
         key,
         '.',
       );
+
       this.logger.verbose(currentPoll);
+
+      // if (currentPoll?.hasStarted) {
+      //   throw new BadRequestException('The poll has already started');
+      // }
+
       return JSON.parse(currentPoll);
     } catch (e) {
       this.logger.error(`Failed to get pollID ${pollID}`);
@@ -87,7 +90,7 @@ export class PollsRepository {
     name,
   }: AddParticipantData): Promise<Poll> {
     this.logger.log(
-      `Attempting to add a participant with userID/name: ${userID}/${name} to pollID:${pollID}`,
+      `Attempting to add a participant with userID/name: ${userID}/${name} to pollID: ${pollID}`,
     );
 
     const key = `polls:${pollID}`;
@@ -104,25 +107,27 @@ export class PollsRepository {
       return this.getPoll(pollID);
     } catch (e) {
       this.logger.error(
-        `Failed to add a participant with userID/name: ${userID}/${name} to pollID:${pollID}`,
+        `Failed to add a participant with userID/name: ${userID}/${name} to pollID: ${pollID}`,
       );
       throw new InternalServerErrorException(
-        `Failed to add a participant with userID/name: ${userID}/${name} to pollID:${pollID}`,
+        `Failed to add a participant with userID/name: ${userID}/${name} to pollID: ${pollID}`,
       );
     }
   }
 
   async removeParticipant(pollID: string, userID: string): Promise<Poll> {
     this.logger.log(`removing userID: ${userID} from poll: ${pollID}`);
+
     const key = `polls:${pollID}`;
     const participantPath = `.participants.${userID}`;
 
     try {
       await this.redisClient.send_command('JSON.DEL', key, participantPath);
+
       return this.getPoll(pollID);
     } catch (e) {
       this.logger.error(
-        `Failed to remove userID:${userID} from pollID:${pollID}`,
+        `Failed to remove userID: ${userID} from poll: ${pollID}`,
         e,
       );
       throw new InternalServerErrorException('Failed to remove participant');
@@ -152,11 +157,11 @@ export class PollsRepository {
       return this.getPoll(pollID);
     } catch (e) {
       this.logger.error(
-        `Failed to add a nomination with nominationID/text: ${nominationID}/${nomination.text} to pollID:${pollID}`,
+        `Failed to add a nomination with nominationID/text: ${nominationID}/${nomination.text} to pollID: ${pollID}`,
         e,
       );
       throw new InternalServerErrorException(
-        `Failed to add a nomination with nominationID/text: ${nominationID}/${nomination.text} to pollID:${pollID}`,
+        `Failed to add a nomination with nominationID/text: ${nominationID}/${nomination.text} to pollID: ${pollID}`,
       );
     }
   }
@@ -166,7 +171,7 @@ export class PollsRepository {
       `removing nominationID: ${nominationID} from poll: ${pollID}`,
     );
 
-    const key = `polls/${pollID}`;
+    const key = `polls:${pollID}`;
     const nominationPath = `.nominations.${nominationID}`;
 
     try {
@@ -174,7 +179,7 @@ export class PollsRepository {
 
       return this.getPoll(pollID);
     } catch (e) {
-      this.logger.log(
+      this.logger.error(
         `Failed to remove nominationID: ${nominationID} from poll: ${pollID}`,
         e,
       );
