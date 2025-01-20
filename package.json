@@ -1,5 +1,5 @@
 {
-  "name": "ranker-course",
+  "name": "ranked-choice-voting",
   "version": "0.0.1",
   "description": "Make decisions with friends via ranked voting!",
   "main": "index.js",
@@ -17,22 +17,12 @@
     "stop": "docker-compose down",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/JacobSNGoodwin/ranker.git"
-  },
   "keywords": [
     "ts",
     "react",
     "nestjs",
     "socketjs"
   ],
-  "author": "Jacob Goodwin",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/JacobSNGoodwin/ranker/issues"
-  },
-  "homepage": "https://github.com/JacobSNGoodwin/ranker#readme",
   "devDependencies": {
     "@types/webpack": "^5.28.0",
     "concurrently": "^7.0.0",
