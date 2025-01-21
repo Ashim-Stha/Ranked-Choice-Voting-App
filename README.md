@@ -1,4 +1,4 @@
-```markdown
+
 # Ranked Choice Voting
 
 Ranked Choice Voting is a web application that allows users to make decisions with friends via ranked voting. The project consists of a client-side application built with React and TypeScript, and a server-side application built with NestJS. The frontend is present in the client directory but is excluded from this documentation as the backend was the primary focus.
@@ -148,4 +148,3 @@ To deploy the application, you can use any cloud provider that supports Docker. 
 ## License
 
 This project is licensed under the MIT License.
-```
