@@ -11,11 +11,11 @@ Ranked Choice Voting is a web application that allows users to make decisions wi
 - View results
 - Real-time updates with WebSockets
 
-- **Ranked Voting System**: Enables users to rank their preferences.
-- **Backend Built with NestJS**: A robust and scalable server framework.
-- **Redis Integration**: Utilizes Redis with ReJSON module for storing and querying voting data.
-- **Dockerized Services**: Easy deployment and scaling using Docker and Docker Compose.
-- **Scalable Architecture**: Designed to handle multiple users and concurrent voting processes efficiently.
+- -- **Ranked Voting System**: Enables users to rank their preferences.
+- -- **Backend Built with NestJS**: A robust and scalable server framework.
+- -- **Redis Integration**: Utilizes Redis with ReJSON module for storing and querying voting data.
+- -- **Dockerized Services**: Easy deployment and scaling using Docker and Docker Compose.
+- -- **Scalable Architecture**: Designed to handle multiple users and concurrent voting processes efficiently.
 
 ## Getting Started
 
